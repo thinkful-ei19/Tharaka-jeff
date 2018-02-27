@@ -1,31 +1,16 @@
 const API_KEY = 'AIzaSyDKlbq8bjC7T5p4XMjGJH30BTM4lO1EB-A';
+//const BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
+
 
 const store = {
   videos: []
 };
-// After the API loads, call a function to enable the search box.
-function handleAPILoaded() {
-  $('#search-button').attr('disabled', false);
-}
 
-// Search for a specified string.
-function search() {
-  var q = $('#query').val();
-  var request = gapi.client.youtube.search.list({
-    q: q,
-    part: 'snippet'
-  });
-
-  request.execute(function(response) {
-    var str = JSON.stringify(response.result);
-    $('#search-container').html('<pre>' + str + '</pre>');
-  });
-}
 
 
 // TASK: Add the Youtube Search Base URL here:
 // Documentation is here: https://developers.google.com/youtube/v3/docs/search/list#usage
-const BASE_URL = '';
+const BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
 
 // TASK:
 // 1. Create a `fetchVideos` function that receives a `searchTerm` and `callback`
@@ -34,8 +19,25 @@ const BASE_URL = '';
 // TEST IT! Execute this function and console log the results inside the callback.
 const fetchVideos = function(searchTerm, callback) {
 
+  const settings = {
+    url: BASE_URL,
+    data: {
+      q: `${searchTerm}`,
+      key: API_KEY,
+      part: 'snippet'
+    },
+    dataType: 'json',
+    type: 'GET',
+    success: callback
+  };
+
+  $.ajax(settings);
+
 };
 
+//let test1; 
+//test1 = fetchVideos('Bat', (name) => console.log(name));
+//console.log(test1);
 // TASK:
 // 1. Create a `decorateResponse` function that receives the Youtube API response
 // 2. Map through the response object's `items` array
@@ -45,8 +47,22 @@ const fetchVideos = function(searchTerm, callback) {
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 const decorateResponse = function(response) {
+  let arr2 = [];
+  response.items.map(items => {
+    let obj = {};
 
+    obj.items = items.id;
+    obj.thumbnails = items.snippet.thumbnails;
+    obj.title = items.snippet.title;
+
+    arr2.push(obj);
+  });
+
+  console.log(arr2);
 };
+
+//decorateResponse(fetchVideos('Bat', (name) => name));
+//decorateResponse(test1)
 
 // TASK:
 // 1. Create a `generateVideoItemHtml` function that receives the decorated object
