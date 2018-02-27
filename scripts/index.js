@@ -32,12 +32,12 @@ const fetchVideos = function(searchTerm, callback) {
   };
 
   $.ajax(settings);
-
+ 
 };
 
-//let test1; 
-//test1 = fetchVideos('Bat', (name) => console.log(name));
-//console.log(test1);
+// fetchVideos('Bat', function(response){
+//      console.log(response);
+//  });
 // TASK:
 // 1. Create a `decorateResponse` function that receives the Youtube API response
 // 2. Map through the response object's `items` array
@@ -46,6 +46,7 @@ const fetchVideos = function(searchTerm, callback) {
 // WILL have to dig into several nested properties!
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
+
 const decorateResponse = function(response) {
   let arr2 = [];
   response.items.map(items => {
@@ -57,10 +58,14 @@ const decorateResponse = function(response) {
 
     arr2.push(obj);
   });
-
-  console.log(arr2);
+  // console.log(arr2);
+  return arr2
 };
-
+// fetchVideos('Bat', function(response){
+// let decorated =  decorateResponse(response);
+// // console.log(response)
+// });
+// decorateResponse(test1)
 //decorateResponse(fetchVideos('Bat', (name) => name));
 //decorateResponse(test1)
 
@@ -69,9 +74,17 @@ const decorateResponse = function(response) {
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
 const generateVideoItemHtml = function(video) {
+  for(let i=0;i<video.length;i++){
+    const element1 = video[i].title;
+    return $(`<li>${element1}</li>`);
+  }
 
 };
-
+fetchVideos('Bat', function(response){
+  let decorated =  decorateResponse(response);
+  // console.log(response)
+  generateVideoItemHtml(decorated)
+  });
 // TASK:
 // 1. Create a `addVideosToStore` function that receives an array of decorated video 
 // objects and sets the array as the value held in store.items
