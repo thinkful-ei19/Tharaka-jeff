@@ -73,25 +73,23 @@ const decorateResponse = function(response) {
 // 1. Create a `generateVideoItemHtml` function that receives the decorated object
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
-const generateVideoItemHtml = function(video) {
+const generateVideoItemHtml = function(video) {//SUPPOSE TO GET ONE OBJECT. NO LOOPS
   for(let i=0;i<video.length;i++){
     const element1 = video[i].title;
-    return $(`<li>${element1}</li>`);
+    console.log(element1);
+    return `<li>${element1}</li>`;
   }
 
 };
-fetchVideos('Bat', function(response){
-  let decorated =  decorateResponse(response);
-  // console.log(response)
-  generateVideoItemHtml(decorated)
-  });
+
 // TASK:
 // 1. Create a `addVideosToStore` function that receives an array of decorated video 
 // objects and sets the array as the value held in store.items
 // TEST IT!
 const addVideosToStore = function(videos) {
-
+  store.videos = videos;
 };
+
 
 // TASK:
 // 1. Create a `render` function
@@ -99,8 +97,28 @@ const addVideosToStore = function(videos) {
 // 3. Add your array of DOM elements to the appropriate DOM element
 // TEST IT!
 const render = function() {
-
+  let arr = [];
+  //console.log(store.videos);
+  store.videos.map(function(output){//REMOVE MAP REPLACE WITH FOR LOOP. USE MAP PROPERLY
+  //console.log(output.title);
+  let result = generateVideoItemHtml(output);
+  arr.push(result);
+  })
+  console.log(arr);
+  $('.results').html(arr);
 };
+
+
+//TEST
+fetchVideos('Bat', function(response){
+
+  let decorated =  decorateResponse(response);
+  // console.log(response)
+  generateVideoItemHtml(decorated);
+  addVideosToStore(decorated);
+  render();
+  });
+
 
 // TASK:
 // 1. Create a `handleFormSubmit` function that adds an event listener to the form
