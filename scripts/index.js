@@ -67,7 +67,7 @@ const handleResponse = function(response) {//decorateResponse
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 
-const decorateResponse = function(response) {
+const decorateResponse = function(response) {//Not needed
   let arr2 = [];
   response.items.map(items => {
     let obj = {};
