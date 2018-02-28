@@ -32,8 +32,28 @@ const fetchVideos = function(searchTerm, callback) {
   };
 
   $.ajax(settings);
- 
+  console.log("after ajax call started");
 };
+
+
+const handleResponse = function(response) {//decorateResponse
+  console.log("ajax success");
+  let result = response.items.map(item => {
+    let object = {
+      title: item.snippet.title,
+      thumbnail: item.snippet.thumbnails.default.url,
+      id: item.id.videoId
+    };
+    return object;
+  });
+
+  let resultHtml = result.map(item => {
+    return `<li>${item.title} <br> <a target="_blank" href="https://www.youtube.com/watch?v=${item.id}"><img src="${item.thumbnail}"></a></li>`
+  });
+
+  $('.results').html(resultHtml);
+  console.log(result);
+}
 
 // fetchVideos('Bat', function(response){
 //      console.log(response);
@@ -76,7 +96,7 @@ const decorateResponse = function(response) {
 const generateVideoItemHtml = function(video) {//SUPPOSE TO GET ONE OBJECT. NO LOOPS
   for(let i=0;i<video.length;i++){
     const element1 = video[i].title;
-    console.log(element1);
+    //console.log(element1);
     return `<li>${element1}</li>`;
   }
 
@@ -98,26 +118,26 @@ const addVideosToStore = function(videos) {
 // TEST IT!
 const render = function() {
   let arr = [];
-  //console.log(store.videos);
-  store.videos.map(function(output){//REMOVE MAP REPLACE WITH FOR LOOP. USE MAP PROPERLY
+  console.log(store.videos);
+  let result = store.videos.map(output => (generateVideoItemHtml(output)))//REMOVE MAP   WITH FOR LOOP. USE MAP PROPERLY
   //console.log(output.title);
-  let result = generateVideoItemHtml(output);
+  // let result = generateVideoItemHtml(output);
   arr.push(result);
-  })
+  // })
   console.log(arr);
   $('.results').html(arr);
 };
 
 
 //TEST
-fetchVideos('Bat', function(response){
+// fetchVideos('Bat', function(response){
 
-  let decorated =  decorateResponse(response);
-  // console.log(response)
-  generateVideoItemHtml(decorated);
-  addVideosToStore(decorated);
-  render();
-  });
+//   let decorated =  decorateResponse(response);
+//   // console.log(response)
+//   generateVideoItemHtml(decorated);
+//   addVideosToStore(decorated);
+//   render();
+//   });
 
 
 // TASK:
@@ -134,6 +154,15 @@ fetchVideos('Bat', function(response){
 const handleFormSubmit = function() {
 
 };
+
+
+$('#search-form').on('submit', function(event){
+  event.preventDefault();
+  let term = $('#search-term').val();
+  //console.log(term);
+  fetchVideos(term, handleResponse);
+  //alert("test");
+})
 
 // When DOM is ready:
 $(function () {
